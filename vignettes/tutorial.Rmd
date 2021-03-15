@@ -1,0 +1,20 @@
+---
+title: "Project 3: mypackage Tutorial"
+author: "Jessie Chen"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Project 3: mypackage Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mypackage)
+```
