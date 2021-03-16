@@ -10,18 +10,27 @@ The goal of mypackage is to ...
 
 ## Installation
 
-You can install the released version of mypackage from [CRAN](https://CRAN.R-project.org) with:
+To download mypacakge, use the code below:
 
 ``` r
 install.packages("mypackage")
+library(mypackage)
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
+Alternatively, you can install the development version directly from GitHub:
 
 ``` r
+devtools::install_github("chen1649/mypackage")
 library(mypackage)
-## basic example code
+```
+
+## USE
+
+
+``` r
+# Use this to view the vignette in the Demo HTML help
+help(package = "Demo", help_type = "html")
+# Use this to view the vignette as an isolated HTML file
+utils::browseVignettes(package = "Demo")
 ```
 

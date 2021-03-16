@@ -3,7 +3,7 @@ title: "Project 3: mypackage Tutorial"
 author: "Jessie Chen"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Project 3: mypackage Tutorial}
+  %\VignetteIndexEntry{mypackage Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,3 +18,4 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(mypackage)
 ```
+
