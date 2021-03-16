@@ -26,4 +26,5 @@ Imports:
     class,
     dplyr,
     randomForest,
-    tidyr
+    tidyr,
+    tibble

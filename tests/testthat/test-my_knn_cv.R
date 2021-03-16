@@ -1,7 +1,7 @@
 test_that("output is a list", {
-  data <- penguins %>% drop_na()
+  data <- mypackage::my_penguins %>% drop_na()
   train <- data[3:6]
-  cl <- data %>% pull(species)
+  cl <- data$species
   expect_type(my_knn_cv(train, cl, 1, 5), "list")
 })
 
