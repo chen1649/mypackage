@@ -19,8 +19,21 @@ knitr::opts_chunk$set(
 library(mypackage)
 ```
 
-```{r}
-123
+## Mypackage Introduction
+
+This package contains useful functions for features such as conducting t-test, linear model, predict output with K-nearest neighbors cross validation, and random forest cross-validation. The package includes easy to use functions that help you in data analysis. 
+
+To install this package, use the code below:
+```{r, eval=FALSE}
+install.packages("mypackage")
+library(mypackage)
 ```
 
+Alternatively, you can install the development version directly from GitHub:
+
+
+```{r, eval=FALSE}
+devtools::install_github("chen1649/mypackage")
+library(mypackage)
+```
 
