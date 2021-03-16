@@ -31,9 +31,86 @@ library(mypackage)
 
 Alternatively, you can install the development version directly from GitHub:
 
-
 ```{r, eval=FALSE}
 devtools::install_github("chen1649/mypackage")
 library(mypackage)
 ```
 
+Now that you have set up the library, let's take a look at some tutorials for functions included in mypackage.
+
+First, let's look at the function `my_t.test`:
+
+This function performs a one sample t-test, and returns a list with the the numeric test statistic, degrees of freedom, alternative, and p-value. 
+
+To understand how to use this function, you can view the documentation using:
+
+```{r, eval=FALSE}
+?my_t.test()
+```
+
+Here, we will use the `lifeExp` data from `my_gapminder`.
+First, we can set up the `lifeExp` data using:
+
+```{r}
+data(my_gapminder)
+data <- my_gapminder$lifeExp
+```
+
+Now, let's implement this two sided test using this code:
+$$
+\begin{align}
+H_0: \mu &= 60,\\
+H_a: \mu &\neq 60.
+\end{align}
+$$
+
+```{r, eval=FALSE}
+my_t.test(data, "two.sided", m = 60)
+```
+
+```{r, echo=FALSE}
+demo1 <- my_t.test(data, "two.sided", m = 60)
+demo1
+```
+
+Setting $\alpha$ to 0.05, we ***DO NOT*** reject the null hypothesis because the p_value is `r demo1$p_val` which is more than 0.05. 
+
+What about one-sided hypothese? Let's demostrate a test of the hypothesis
+
+$$
+\begin{align}
+H_0: \mu &= 60,\\
+H_a: \mu & < 60.
+\end{align}
+$$
+
+```{r, eval=FALSE}
+my_t.test(data, "less", m = 60)
+```
+
+```{r, echo=FALSE}
+demo2 <- my_t.test(data, "less", m = 60)
+demo2
+```
+
+Setting $\alpha$ to 0.05, we reject the null hypothesis because the p_value is `r demo2$p_val` which is less than 0.05. 
+
+For the hypothese below, we can use this code:
+
+$$
+\begin{align}
+H_0: \mu &= 60,\\
+H_a: \mu & < 60.
+\end{align}
+$$
+
+```{r, echo=FALSE}
+demo3 <- my_t.test(data, "less", m = 60)
+demo3
+```
+
+```{r, eval=FALSE}
+my_t.test(data, "greater", m = 60)
+```
+
+Setting $\alpha$ to 0.05, we reject the null hypothesis because the p_value is `r demo3$p_val` which is less than 0.05. 
