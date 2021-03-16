@@ -1,7 +1,7 @@
 ---
 title: "Project 3: mypackage Tutorial"
-author: "Jessie Chen"
 output: rmarkdown::html_vignette
+author: "Jessie Chen"
 vignette: >
   %\VignetteIndexEntry{mypackage Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
@@ -19,3 +19,6 @@ knitr::opts_chunk$set(
 library(mypackage)
 ```
 
+```{r}
+123
+```
