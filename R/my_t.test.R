@@ -13,6 +13,8 @@
 #' @examples
 #' my_t.test((rnorm(10, mean = 0, sd = 1)), "greater", m = 0)
 #'
+#' @keywords prediction
+#'
 #' @export
 my_t.test <- function(x, alt, m) {
   std_error <- (sd(x)) / sqrt(length(x))

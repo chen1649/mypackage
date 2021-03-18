@@ -20,4 +20,7 @@ This function fits a linear model.
 }
 \examples{
 my_lm(mpg ~ hp, data = mtcars)
+
 }
+\keyword{inference}
+\keyword{prediction}

@@ -25,3 +25,4 @@ This function conducts a t-test
 my_t.test((rnorm(10, mean = 0, sd = 1)), "greater", m = 0)
 
 }
+\keyword{prediction}

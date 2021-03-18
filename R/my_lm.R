@@ -10,6 +10,9 @@
 #'
 #' @examples
 #' my_lm(mpg ~ hp, data = mtcars)
+#'
+#' @keywords prediction inference
+#'
 #' @export
 my_lm <- function(formula, data) {
   x <- model.matrix(formula, data)

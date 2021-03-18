@@ -22,3 +22,12 @@ class. CV_err is a numeric with cross-validation misclassification error
 \description{
 This function predicts output class using covariates.
 }
+\examples{
+penguins <- mypackage::my_penguins
+data <- penguins \%>\% tidyr::drop_na()
+train <- data[3:6]
+cl <- data$species
+my_knn_cv(train, cl, 1, 5)
+
+}
+\keyword{prediction}

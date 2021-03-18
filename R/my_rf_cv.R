@@ -11,6 +11,11 @@
 #' @importFrom tidyr drop_na
 #' @importFrom dplyr filter
 #'
+#' @examples
+#' my_rf_cv(2)
+#' my_rf_cv(5)
+#'
+#' @keywords prediction
 #' @export
 my_rf_cv <- function(k) {
   penguins <- mypackage::my_penguins

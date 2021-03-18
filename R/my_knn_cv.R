@@ -10,6 +10,14 @@
 #' @return a list with objects class and cv_err. Class is a vector of predicted
 #'   class. CV_err is a numeric with cross-validation misclassification error
 #'
+#' @examples
+#' penguins <- mypackage::my_penguins
+#' data <- penguins %>% tidyr::drop_na()
+#' train <- data[3:6]
+#' cl <- data$species
+#' my_knn_cv(train, cl, 1, 5)
+#'
+#' @keywords prediction
 #' @export
 
 my_knn_cv <- function(train, cl, k_nn, k_cv) {

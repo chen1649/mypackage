@@ -15,3 +15,9 @@ the number of mse errors
 \description{
 This function predicts output class using covariates.
 }
+\examples{
+my_rf_cv(2)
+my_rf_cv(5)
+
+}
+\keyword{prediction}

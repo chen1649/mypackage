@@ -17,11 +17,18 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(mypackage)
+library(tidyverse)
+library(tidyr)
+library(class)
+library(dplyr)
 ```
 
 ## Mypackage Introduction
 
-This package contains useful functions for features such as conducting t-test, linear model, predict output with K-nearest neighbors cross validation, and random forest cross-validation. The package includes easy to use functions that help you in data analysis. 
+This package contains useful functions for features such as conducting t-test, 
+linear model, predict output with K-nearest neighbors cross validation, and 
+random forest cross-validation. The package includes easy to use functions 
+that help you in data analysis. 
 
 To install this package, use the code below:
 ```{r, eval=FALSE}
@@ -36,11 +43,14 @@ devtools::install_github("chen1649/mypackage")
 library(mypackage)
 ```
 
-Now that you have set up the library, let's take a look at some tutorials for functions included in mypackage.
+Now that you have set up the library, let's take a look at some tutorials for 
+functions included in mypackage.
 
+### A tutorial for `my_t.test`
 First, let's look at the function `my_t.test`:
 
-This function performs a one sample t-test, and returns a list with the the numeric test statistic, degrees of freedom, alternative, and p-value. 
+This function performs a one sample t-test, and returns a list with the the 
+numeric test statistic, degrees of freedom, alternative, and p-value. 
 
 To understand how to use this function, you can view the documentation using:
 
@@ -53,10 +63,11 @@ First, we can set up the `lifeExp` data using:
 
 ```{r}
 data(my_gapminder)
-data <- my_gapminder$lifeExp
+data_lifeExp <- my_gapminder$lifeExp
 ```
 
 Now, let's implement this two sided test using this code:
+
 $$
 \begin{align}
 H_0: \mu &= 60,\\
@@ -65,15 +76,16 @@ H_a: \mu &\neq 60.
 $$
 
 ```{r, eval=FALSE}
-my_t.test(data, "two.sided", m = 60)
+my_t.test(data_lifeExp, "two.sided", m = 60)
 ```
 
 ```{r, echo=FALSE}
-demo1 <- my_t.test(data, "two.sided", m = 60)
+demo1 <- my_t.test(data_lifeExp, "two.sided", m = 60)
 demo1
 ```
 
-Setting $\alpha$ to 0.05, we ***DO NOT*** reject the null hypothesis because the p_value is `r demo1$p_val` which is more than 0.05. 
+Setting $\alpha$ to 0.05, we ***DO NOT*** reject the null hypothesis because 
+the p_value is `r demo1$p_val` which is more than 0.05. 
 
 What about one-sided hypothese? Let's demostrate a test of the hypothesis
 
@@ -85,32 +97,220 @@ H_a: \mu & < 60.
 $$
 
 ```{r, eval=FALSE}
-my_t.test(data, "less", m = 60)
+my_t.test(data_lifeExp, "less", m = 60)
 ```
 
 ```{r, echo=FALSE}
-demo2 <- my_t.test(data, "less", m = 60)
+demo2 <- my_t.test(data_lifeExp, "less", m = 60)
 demo2
 ```
 
-Setting $\alpha$ to 0.05, we reject the null hypothesis because the p_value is `r demo2$p_val` which is less than 0.05. 
+Setting $\alpha$ to 0.05, we reject the null hypothesis because the p_value is 
+`r demo2$p_val` which is less than 0.05. 
 
 For the hypothese below, we can use this code:
 
 $$
 \begin{align}
 H_0: \mu &= 60,\\
-H_a: \mu & < 60.
+H_a: \mu & > 60.
 \end{align}
 $$
 
 ```{r, echo=FALSE}
-demo3 <- my_t.test(data, "less", m = 60)
+demo3 <- my_t.test(data_lifeExp, "greater", m = 60)
 demo3
 ```
 
 ```{r, eval=FALSE}
-my_t.test(data, "greater", m = 60)
+my_t.test(data_lifeExp, "greater", m = 60)
 ```
 
-Setting $\alpha$ to 0.05, we reject the null hypothesis because the p_value is `r demo3$p_val` which is less than 0.05. 
+Setting $\alpha$ to 0.05, we fail to reject the null hypothesis because the 
+p_value is `r demo3$p_val` which is more than 0.05. 
+
+### A tutorial for `my_lm`
+The function `my_lm` fits a linear model. In the following demonstration,
+let's use the lifeExp as response variable and gdpPercap and continent as 
+explanatory variables.
+
+```{r}
+lm1 <- my_lm(lifeExp ~ gdpPercap + continent, data = my_gapminder)
+lm1
+```
+
+So what does the result mean? It means that we can expect to see an increase
+of  4.452704e-04 in life expectancey for every unit increase of GDP per capita. 
+For the standard error, we can say that we expect a difference of 2.349795e-05
+in life expectancy if we ran the model again and again. T value measure of how 
+many standard deviations our coefficient estimate is far away from 0. In this 
+example the t-value is 1.894933e+01 which is quite large compared to the standard
+error, indicating a relationship between GDP per capita and life expectancy. 
+Lastly, the Pr(>|t|) is the p-value, which means indicates the likelihood of 
+observing a relationship by pure chance. In our example, it is 8.552893e-73
+which is quite small and we can reject the null hypothesis given that we set 
+$\alpha$ to 0.05.
+
+Hypothesis test associated with the the `gdpPerCap` is the following:
+
+$$
+\begin{align}
+H_0: \mu &= 0,\\
+H_a: \mu &\neq 0.
+\end{align}
+$$
+
+As stated above, we reject the null hypothesis in this case, as we set $\alpha$ 
+to 0.05 because we have a p-value of 8.552893e-73.
+
+Now, let's take a look at the actual vs fitted values. 
+
+```{r}
+# FINDING fitted yhat
+# getting the matrix of the estimates value 
+my_estimates <- as.matrix(lm1[,"Estimate"])
+
+# fitting data into matrix to create x matrix
+x_mat <- model.matrix(lifeExp ~ gdpPercap + continent, mypackage::my_gapminder)
+
+# matrix multiplication to get yhat 
+yhat <- x_mat %*% my_estimates
+actual_v_fitted <- data.frame(actual = my_gapminder$lifeExp, fitted = yhat)
+
+# plotting the actual vs fitted
+ggplot(actual_v_fitted, aes(x = fitted, y = actual)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, col = "red", lty = 2) + 
+  theme_bw(base_size = 15) +
+  labs(x = "Fitted values", y = "Actual values", title = "Actual vs. Fitted") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+So what does this plot say about the model fit? 
+The X-axis represents the fitted values, and the Y axis represents the actual 
+values. We can see that the points do not fit the linear line closely. The 
+linear line represents a overall positive trend, but the actual values are less
+linear.
+
+
+### A tutorial for `my_knn_cv` 
+
+To demonstrate the `my_knn_cv` function, let's predict output class `species` 
+using covariates `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, and 
+`body_mass_g` in the my_penguins data.
+
+```{r}
+# setting up the data
+data(my_penguins)
+data <- na.omit(my_penguins)
+# setting train to be bill_length_mm, bill_depth_mm, flipper_length_mm, and 
+# body_mass_g
+train <- data[3:6] 
+cl <- data$species
+# create empty list for cv error and train error
+cv_err_list <- list(rep(NA, 10))
+train_err_list <- list(rep(NA, 10))
+
+# Iterate from k_nn=1,…,10
+for (i in 1:10) {
+  demo <- my_knn_cv(train, cl, i, 5)
+  # record the training misclassification rate and the CV misclassification rate
+  cv_err_list[i] <- demo$cv_err
+  train_err <- knn(train, train, demo$class)
+  train_err_list[i] <- mean(train_err != data$species)
+}
+
+# putting results in a table
+result <- cbind(cv_err_list, train_err_list)
+
+result
+```
+
+According to the table above, the model we to choose is Knn = 1 if we base our 
+choice off of training misclassification rate, we would also choose knn = 1
+based on the CV misclassification rate. 
+
+In practice, we would choose knn = 1 because we want to choose a knn value 
+where the CV misclassification rate is at its lowest. 
+
+At this point, you might wonder why we are using the `my_knn_cv` function in
+the first place? The cross-validation is a resampling procedure that uses a 
+limited sample in orderto estimate how the model is expected to perform to make
+prediction. The process of k-fold cross-validation is as follows:
+
+- Split data into k parts (folds)
+
+- Use all but 1 fold as training data and fit the model
+
+- Use the remaining fold for your test data and make predictions
+
+- Switch which fold is your test data and repeat steps 2 and 3 until all folds
+have been test data (k times)
+
+- Compute squared error
+
+
+### A tutorial for `my_rf_cv`
+
+Let's predict body_mass_g using covariates bill_length_mm, bill_depth_mm, and 
+flipper_length_mm.
+
+```{r}
+# Create empty lists to store MSE for each k value
+MSE_k2 <- rep(NA, 30)
+MSE_k5 <- rep(NA, 30)
+MSE_k10 <- rep(NA, 30)
+
+# iterates eacch k value 30 times
+for (i in 1:30) {
+  MSE_k2[i] <-  my_rf_cv(2) 
+}
+
+for (i in 1:30) {
+  MSE_k5[i] <-  my_rf_cv(5) 
+}
+
+for (i in 1:30) {
+  MSE_k10[i] <-  my_rf_cv(10) 
+}
+
+# append each list together 
+cv_list <- append(MSE_k2, MSE_k5)
+cv_list <- append(cv_list, MSE_k10)
+# create a list of k values
+k_val <- c(rep(2, 30), rep(5, 30), rep(10, 30))
+
+# create a dataframe
+simulation_csv <- data.frame("k_as_2" = MSE_k2,
+                             "k_as_5" = MSE_k5,
+                             "k_as_10" = MSE_k10)
+
+# Create a data frame to graph the boxplot
+df_rf_cv <- as.data.frame(cbind(cv_list, k_val))
+box_plot <- ggplot(data = df_rf_cv, 
+                   aes(x = as.factor(k_val), y = as.numeric(cv_list))) +
+                   geom_boxplot()
+
+# create summary table
+sum_table <- data.frame("k" = c(2, 5, 10),
+                      "sd" = c(sd(MSE_k2), sd(MSE_k5), sd(MSE_k10)),
+                      "mean" = c(mean(MSE_k2), mean(MSE_k5), mean(MSE_k10)))
+```
+
+Below is a boxplot for the MSE errors in each k values, and a summary table
+of the standard deviation and mean.
+
+```{r}
+box_plot
+sum_table
+```
+
+The standard deviation and mean for k = 2 are largest and standard deviation and 
+mean for k = 10 are smallest. This is because there is a tradeoff 
+between bias and variance where a larger k indicates that the algorithm is 
+underfitting and a lower k value indicates that it is overfitting. In the case
+where k is 2, bias is small but variance is large because it is highly sensitive.
+When k is larger, bias is large but variance is small.
+
+
+
