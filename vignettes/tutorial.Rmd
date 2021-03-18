@@ -289,7 +289,8 @@ simulation_csv <- data.frame("k_as_2" = MSE_k2,
 df_rf_cv <- as.data.frame(cbind(cv_list, k_val))
 box_plot <- ggplot(data = df_rf_cv, 
                    aes(x = as.factor(k_val), y = as.numeric(cv_list))) +
-                   geom_boxplot()
+                   geom_boxplot() +
+  labs(x = "K value", y = "MSE", title = "MSE vs k value") 
 
 # create summary table
 sum_table <- data.frame("k" = c(2, 5, 10),
