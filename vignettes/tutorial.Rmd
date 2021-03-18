@@ -43,6 +43,7 @@ devtools::install_github("chen1649/mypackage")
 library(mypackage)
 ```
 
+
 Now that you have set up the library, let's take a look at some tutorials for 
 functions included in mypackage.
 
