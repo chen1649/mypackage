@@ -29,8 +29,8 @@ library(mypackage)
 
 ``` r
 # Use this to view the vignette in the Demo HTML help
-help(package = "Demo", help_type = "html")
+help(package = "mypackage", help_type = "html")
 # Use this to view the vignette as an isolated HTML file
-utils::browseVignettes(package = "Demo")
+utils::browseVignettes(package = "mypackage")
 ```
 
