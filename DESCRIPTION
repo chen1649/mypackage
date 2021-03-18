@@ -27,4 +27,5 @@ Imports:
     dplyr,
     randomForest,
     tidyr,
-    tibble
+    tibble,
+    ggplot2

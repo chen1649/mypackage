@@ -20,6 +20,7 @@ library(mypackage)
 library(tidyr)
 library(class)
 library(dplyr)
+library(ggplot2)
 ```
 
 ## Mypackage Introduction
