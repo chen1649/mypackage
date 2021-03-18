@@ -25,7 +25,8 @@ library(mypackage)
 ```
 
 ## USE
-
+The vignette demonstrates example usage of all main functions. 
+You can see the vignette by using the following code:
 
 ``` r
 # Use this to view the vignette in the Demo HTML help
